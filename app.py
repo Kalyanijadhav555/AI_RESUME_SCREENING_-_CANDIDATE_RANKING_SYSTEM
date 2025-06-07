@@ -3,49 +3,45 @@ from PyPDF2 import PdfReader
 import pandas as pd
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.metrics.pairwise import cosine_similarity
-file=r"C:\Users\mamat\OneDrive\Documents\Udemy\Internship_project\Resumes.pdf"
 
-# Function to extract text from PDF
-def extract_text_from_pdf(file):
-    pdf = PdfReader(file)
+# Extract text from uploaded PDF
+def extract_text_from_pdf(uploaded_file):
+    reader = PdfReader(uploaded_file)
     text = ""
-    for page in pdf.pages:
-        text += page.extract_text()
+    for page in reader.pages:
+        try:
+            page_text = page.extract_text()
+            if page_text:
+                # Fix: replace invalid characters
+                text += page_text.encode("utf-8", errors="ignore").decode("utf-8") + "\n"
+        except Exception as e:
+            text += f"\n[Error reading this page: {e}]\n"
     return text
-# Function to rank resumes based on job description
+
+
+# Rank resumes
 def rank_resumes(job_description, resumes):
-    # Combine job description with resumes
-    documents=[job_description] + resumes
-    vectorizer = TfidfVectorizer().fit_transform(documents)
-    vectors=vectorizer.toarray()
+    docs = [job_description] + resumes
+    vectorizer = TfidfVectorizer().fit_transform(docs)
+    vectors = vectorizer.toarray()
+    scores = cosine_similarity([vectors[0]], vectors[1:]).flatten()
+    return scores
 
-    # Calculate cosine similarity
-    job_description_vector = vectors[0]
-    resume_vectors = vectors [1:]
-    cosine_similarities = cosine_similarity ([job_description_vector], resume_vectors).flatten()
-    
-    return cosine_similarities
-# Streamlit app
-st.title("AI Resume Screening & Candidate Ranking System")
-# Job description input
-st.header("Job Description")
-job_description= st.text_area ("Enter the job description")
-# File uploader
-st.header("Upload Resumes")
-uploaded_files = st.file_uploader("Upload PDF files", type=["pdf"], accept_multiple_files=True)
-if uploaded_files and job_description:
-    st.header("Ranking Resumes")
-    
-    resumes = []
-    for file in uploaded_files:
-        text = extract_text_from_pdf(file)
-        resumes.append(text)
+# Streamlit UI
+st.set_page_config(page_title="Resume Ranker", layout="centered")
+st.title("AI Resume Screening & Ranking System")
 
-    # Rank resumes
-    score = rank_resumes(job_description, resumes)
+job_description = st.text_area("Enter the Job Description")
+uploaded_files = st.file_uploader("Upload Resume PDFs", type=["pdf"], accept_multiple_files=True)
 
-    # Display scores
-    results = pd.DataFrame({"Resume": [file.name for file in uploaded_files], "Score": score })
-    results = results.sort_values(by="Score", ascending=False)
-    
+if job_description and uploaded_files:
+    resumes = [extract_text_from_pdf(file) for file in uploaded_files]
+    scores = rank_resumes(job_description, resumes)
+
+    results = pd.DataFrame({
+        "Resume": [file.name for file in uploaded_files],
+        "Match Score": scores
+    }).sort_values(by="Match Score", ascending=False)
+
+    st.subheader("Ranking Results")
     st.write(results)

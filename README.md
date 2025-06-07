@@ -1,94 +1,172 @@
-AI Resume Screening & Candidate Ranking System
+# 📄 AI Resume Screening & Candidate Ranking System
 
-Project Overview
-The AI Resume Screening & Candidate Ranking System is an innovative solution designed to automate the resume screening process using Natural Language Processing (NLP). The system compares uploaded resumes with a given job description and generates a ranked list of candidates based on their relevance to the job. This significantly reduces manual effort, minimizes human bias, and ensures faster recruitment by instantly identifying the most suitable candidates.
+An intelligent web-based system that automatically screens and ranks resumes based on a given job description. Built using **Python**, **NLP**, **machine learning**, and deployed via an interactive **Streamlit interface**, it helps recruiters instantly identify the most relevant candidates.
 
-The system uses TF-IDF (Term Frequency-Inverse Document Frequency) and Cosine Similarity to compare the textual content of resumes and job descriptions. It then outputs a ranked list with a matching score for each candidate, enabling recruiters to make data-driven hiring decisions.
+---
+
+## 🧠 Project Summary
+
+Modern recruitment involves sifting through dozens or hundreds of resumes, often manually. This system uses **TF-IDF vectorization** and **cosine similarity** to automate the resume shortlisting process.
+
+You simply:
+
+* Paste a job description
+* Upload one or more resume PDFs
+* View ranked resumes by their **match score**
+
+All processing happens **locally** — no resume data is sent to any server.
+
+---
+
+## 🔧 Technologies Used
+
+| Technology    | Purpose                                  |
+| ------------- | ---------------------------------------- |
+| Python 3.11+  | Core programming language                |
+| Streamlit     | Web application interface                |
+| PyPDF2        | Resume (PDF) text extraction             |
+| scikit-learn  | TF-IDF and cosine similarity computation |
+| pandas        | Result display in tables                 |
+| VS Code + Git | Local development and version control    |
+
+---
+## 🧩 System Design
+
+The system architecture is composed of several key components that work together to automate the resume screening and ranking process.
+
+### Architecture Diagram
+![pic](https://github.com/user-attachments/assets/f6a89341-f9f2-4854-a53d-95bc7e1e8153)
 
 
-Key Features
-- Automated Resume Screening: Extracts and analyzes resume content.
-- Candidate Ranking:  Ranks resumes based on similarity to the job description.
-- Matching Score (%): Provides a percentage match score for each candidate.
-- Streamlit Web Interface: Offers an interactive and easy-to-use UI.
-- Bulk PDF Upload: Supports multiple resume uploads in PDF format.
-- Bias-Free Screening: Ensures fair candidate shortlisting based on skills.
+### Component Breakdown
+
+#### 🔹 User Input and Frontend
+
+* **Enter Job Description**: A text area to input a job role's description.
+* **Upload Resumes**: Upload one or more resume PDFs through the interface.
+
+#### 🔹 Backend Processing
+
+* **Resume Parsing**: Converts uploaded PDF resumes into raw text using `PyPDF2`.
+* **Text Extraction**: Cleans and prepares the text for vectorization.
+
+#### 🔹 Feature Engineering
+
+* **TF-IDF Vectorization**: Converts textual data into numeric form using term frequency–inverse document frequency.
+
+#### 🔹 Similarity Computation
+
+* **Cosine Similarity**: Measures the similarity between the job description and each resume vector.
+
+#### 🔹 Ranking and Output Display
+
+* **Store Results**: Combines resume names and similarity scores in a `DataFrame`.
+* **Sort Resumes**: Orders candidates based on their match score.
+* **Display Ranked Resumes**: Shows the results in a sortable, tabular format on the Streamlit frontend.
+
+---
 
 
 
-How It Works
-1. Enter the Job Description: The recruiter enters the job description in the provided text area.
-2. Upload Resumes:Upload one or more resumes in PDF format.
-3. Resume Parsing: The system extracts text from the PDF files.
-4. Similarity Matching: Using TF-IDF Vectorizer and Cosine Similarity, the system calculates the matching score.
-5. Candidate Ranking: The output is a ranked list of candidates from highest to lowest match.
-
-
-Technologies Used
-| Technology        | Purpose                                  |
-|-----------------|---------------------------------------------|
-| Python          | Backend logic and processing              |
-| Streamlit       | Frontend interface for the web app        |
-| PyPDF2          | Extract text from PDF files                |
-| Scikit-learn    | Implement TF-IDF and Cosine Similarity   |
-| Pandas          | Data handling and structuring             |
 
 
 
-Project Structure
-The project directory contains the following files and folders:
+
+## 🌐 Live Preview (Streamlit UI)
+![Screenshot 2025-05-11 133225](https://github.com/user-attachments/assets/bbb4bb35-69d2-47c9-80c2-d70343a0b078)
 
 
-AI-Resume-Screening/
+
+Shows:
+
+* Job description input box
+* PDF file uploader
+* Ranked resume match table
+
+---
+
+## 📁 Folder Structure
+
+```
+Resume-Screening-and-Ranking-System/
 │
-├── app.py               # Main application file
-├── requirements.txt     # Project dependencies
-├── sample_resumes/      # Folder containing sample resumes
-├── output/              # Stores generated output files
-├── models/              # Model files (if applicable)
-├── README.md            # Project documentation
+├── app.py                  # Streamlit frontend application
+├── resume_ranking.ipynb   # Jupyter notebook for logic testing
+├── requirements.txt        # Python dependencies
+├── README.md               # Project documentation
+└── .gitignore              # Files/folders to exclude from Git tracking
+```
 
+---
 
+## 🛠️ How to Set Up Locally
 
-Installation and Setup
-Follow these steps to set up and run the project on your local system:
+> Tested on Windows 11 (PowerShell, VS Code)
 
-Step 1: Clone the Repository
+### ✅ Step 1: Clone the Repository
 
-git clone https://github.com/your-username/repository-name.git
-cd repository-name
+```powershell
+git clone https://github.com/Alpha-Soumen/Resume-Screening-and-Ranking-System.git
+cd Resume-Screening-and-Ranking-System
+```
 
-Step 2: Create a Virtual Environment (Optional)
+### ✅ Step 2: Create Virtual Environment
 
+```powershell
 python -m venv venv
-source venv/bin/activate     # For MacOS/Linux
-venv\Scripts\activate        # For Windows
+.\venv\Scripts\Activate
+```
 
+### ✅ Step 3: Install Dependencies
 
-Step 3: Install Dependencies
-
+```powershell
 pip install -r requirements.txt
+```
 
+### ✅ Step 4: Run the Streamlit App
 
-Step 4: Run the Application
-
+```powershell
 streamlit run app.py
+```
 
-Step 5: Access the Application
-Open your browser and go to:
+> App will open in your default browser at [http://localhost:8501](http://localhost:8501)
 
-http://localhost:8501
+---
+
+## 🧪 Features
+
+* Upload multiple resumes (PDF)
+* Paste any job description
+* Rank resumes using cosine similarity
+* View results as a sortable table
+* Supports unicode-rich resumes (with encoding fix)
+
+---
+
+## 🧠 How It Works (Under the Hood)
+
+1. **Text Extraction**: Each uploaded PDF is parsed using `PyPDF2`, skipping bad characters.
+2. **Vectorization**: The job description and resume texts are converted using `TfidfVectorizer`.
+3. **Similarity Comparison**: Cosine similarity scores each resume against the job description.
+4. **Ranking**: A DataFrame shows resume names and scores in descending order.
+
+---
 
 
-Expected Output
-The system will generate a ranked list of candidates based on their resume content matching the job description. Example output:
+## 💡 Future Enhancements
 
-| Resume Name                 | Matching Score (%) |
-|-----------------------------|--------------------|
-| Manjula_resume.pdf   | 39.48%             |
-| Rasag_resume.pdf           | 35.46%             |
-| NAGA_resume.pdf     | 29.24%             |
-| Harsha_resume.pdf       | 28.76%             |
-| Emma_watson.pdf              | 12.32%             |
+* BERT-based semantic similarity for better understanding
+* Admin login via Firebase
+* Resume keyword visualizations (charts)
+* Export matched resumes to PDF or CSV
+* Deployment on Streamlit Cloud
 
-The higher the matching score, the more suitable the candidate is for the job role.
+---
+
+## 👨‍💻 Developed by
+
+* **Soumen Bhunia**
+  [![LinkedIn](https://img.shields.io/badge/LinkedIn-blue?logo=linkedin)](https://www.linkedin.com/in/soumen-bhunia/)
+
+
+
